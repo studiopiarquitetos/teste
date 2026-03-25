@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fluxograma POP — Processo de Delegação | Studio PI</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bege: #E0DECC;
+    --bege-light: #F5F2EB;
+    --fundo: #FAF9F6;
+    --terracota: #C76C4D;
+    --terracota-dark: #B04B20;
+    --terracota-deep: #8B4528;
+    --preto: #1A1A1A;
+    --cinza: #6B6560;
+    --cinza-light: #B5AFA8;
+    --branco: #FFFFFF;
+    --shadow-sm: 0 2px 8px rgba(26,26,26,0.06);
+    --shadow-md: 0 8px 32px rgba(26,26,26,0.08);
+    --shadow-lg: 0 16px 48px rgba(26,26,26,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--fundo);
+    color: var(--preto);
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    padding: 32px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--bege);
+    background: var(--branco);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+    background: rgba(255,255,255,0.92);
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .logo-mark {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--preto);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .logo-mark img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+  }
+
+  .header-text h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--preto);
+    letter-spacing: -0.3px;
+  }
+
+  .header-text p {
+    font-size: 13px;
+    color: var(--cinza);
+    margin-top: 2px;
+  }
+
+  .header-badges {
+    display: flex;
+    gap: 12px;
+  }
+
+  .badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 20px;
+    background: var(--fundo);
+    border-radius: 12px;
+    border: 1px solid var(--bege);
+  }
+
+  .badge-num {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--terracota);
+    line-height: 1;
+  }
+
+  .badge-label {
+    font-size: 10px;
+    color: var(--cinza);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 3px;
+  }
+
+  /* ── MAIN FLOW ── */
+  .flow-container {
+    padding: 48px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* ── FASE ── */
+  .fase {
+    margin-bottom: 24px;
+    position: relative;
+  }
+
+  .fase-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    cursor: pointer;
+    padding: 24px 32px;
+    background: var(--branco);
+    border-radius: 20px;
+    border: 1.5px solid var(--bege);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  .fase-header:hover {
+    border-color: var(--terracota);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  .fase-header.active {
+    border-color: var(--terracota);
+    box-shadow: var(--shadow-md);
+  }
+
+  .fase-header::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+    border-radius: 20px 0 0 20px;
+    transition: background 0.3s;
+  }
+
+  .fase:nth-child(1) .fase-header::before { background: var(--terracota); }
+  .fase:nth-child(2) .fase-header::before { background: var(--terracota-dark); }
+  .fase:nth-child(3) .fase-header::before { background: var(--terracota-deep); }
+
+  .fase-number {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--branco);
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .fase:nth-child(1) .fase-number { background: var(--terracota); }
+  .fase:nth-child(2) .fase-number { background: var(--terracota-dark); }
+  .fase:nth-child(3) .fase-number { background: var(--terracota-deep); }
+
+  .fase-number span {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 9px;
+  }
+
+  .fase:nth-child(1) .fase-number span { background: var(--terracota); }
+  .fase:nth-child(2) .fase-number span { background: var(--terracota-dark); }
+  .fase:nth-child(3) .fase-number span { background: var(--terracota-deep); }
+
+  .fase-info {
+    flex: 1;
+  }
+
+  .fase-info h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--preto);
+    margin-bottom: 3px;
+  }
+
+  .fase-info p {
+    font-size: 13px;
+    color: var(--cinza);
+  }
+
+  .fase-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .fase-count {
+    font-size: 12px;
+    color: var(--cinza-light);
+    background: var(--fundo);
+    padding: 6px 14px;
+    border-radius: 8px;
+    white-space: nowrap;
+  }
+
+  .fase-toggle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--fundo);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s;
+    flex-shrink: 0;
+  }
+
+  .fase-header.active .fase-toggle {
+    transform: rotate(180deg);
+  }
+
+  .fase-toggle svg {
+    width: 16px;
+    height: 16px;
+    stroke: var(--cinza);
+  }
+
+  /* ── PASSOS CONTAINER ── */
+  .passos-container {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .passos-container.open {
+    max-height: 1200px;
+  }
+
+  .passos-wrapper {
+    padding: 16px 0 8px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+  }
+
+  /* Linha conectora vertical */
+  .passos-wrapper::before {
+    content: '';
+    position: absolute;
+    left: 56px;
+    top: 0;
+    bottom: 16px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--bege), transparent);
+    border-radius: 2px;
+  }
+
+  /* ── PASSO ── */
+  .passo {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 12px 0;
+    padding-left: 24px;
+    position: relative;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .passo.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .passo-dot-container {
+    width: 66px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  .passo-dot {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--branco);
+    border: 2.5px solid var(--bege);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--cinza);
+    transition: all 0.3s;
+  }
+
+  .passo:hover .passo-dot {
+    border-color: var(--terracota);
+    color: var(--terracota);
+    transform: scale(1.1);
+    box-shadow: 0 0 0 6px rgba(199,108,77,0.1);
+  }
+
+  .passo-card {
+    flex: 1;
+    background: var(--branco);
+    border-radius: 14px;
+    padding: 18px 24px;
+    border: 1px solid transparent;
+    transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    cursor: default;
+    position: relative;
+  }
+
+  .passo-card:hover {
+    border-color: var(--bege);
+    box-shadow: var(--shadow-sm);
+    transform: translateX(4px);
+  }
+
+  .passo-card-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .passo-icon {
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  .passo-card h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--preto);
+  }
+
+  .passo-desc {
+    font-size: 12px;
+    color: var(--cinza);
+    margin-top: 6px;
+    line-height: 1.5;
+    display: none;
+  }
+
+  .passo-card:hover .passo-desc {
+    display: block;
+  }
+
+  .passo-checklist-badge {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 10px;
+    color: var(--cinza-light);
+    background: var(--fundo);
+    padding: 4px 10px;
+    border-radius: 6px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .passo-card:hover .passo-checklist-badge {
+    opacity: 1;
+  }
+
+  /* ── CONECTOR ENTRE FASES ── */
+  .fase-connector {
+    display: flex;
+    justify-content: center;
+    padding: 8px 0;
+    position: relative;
+  }
+
+  .fase-connector svg {
+    width: 40px;
+    height: 40px;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    padding: 32px 48px;
+    border-top: 1px solid var(--bege);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 24px;
+  }
+
+  .footer-left {
+    font-size: 11px;
+    color: var(--cinza-light);
+  }
+
+  .footer-legend {
+    display: flex;
+    gap: 24px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--cinza);
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--terracota), var(--terracota-dark));
+    z-index: 200;
+    transition: width 0.3s;
+    border-radius: 0 2px 2px 0;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .header { padding: 20px 24px; flex-direction: column; gap: 16px; }
+    .flow-container { padding: 24px; }
+    .fase-header { padding: 16px 20px; }
+    .passo { padding-left: 8px; }
+    .passos-wrapper::before { left: 40px; }
+  }
+
+  /* ── PRINT ── */
+  @media print {
+    .header { position: static; }
+    .passos-container { max-height: none !important; }
+    .passo { opacity: 1 !important; transform: none !important; }
+    .passo-desc { display: block !important; }
+    .progress-bar { display: none; }
+    .fase-toggle { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-left">
+    <div class="logo-mark">
+      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <text x="5" y="28" font-family="'Playfair Display', serif" font-size="22" font-weight="700" fill="#E0DECC">PI</text>
+      </svg>
+    </div>
+    <div class="header-text">
+      <h1>Processo de Delegação</h1>
+      <p>Procedimento Operacional Padrão — Studio PI Arquitetura</p>
+    </div>
+  </div>
+  <div class="header-badges">
+    <div class="badge">
+      <div class="badge-num">03</div>
+      <div class="badge-label">Fases</div>
+    </div>
+    <div class="badge">
+      <div class="badge-num">13</div>
+      <div class="badge-label">Passos</div>
+    </div>
+  </div>
+</header>
+
+<!-- FLOW -->
+<main class="flow-container">
+
+  <!-- FASE 01 -->
+  <div class="fase">
+    <div class="fase-header active" onclick="toggleFase(this)">
+      <div class="fase-number">01</div>
+      <div class="fase-info">
+        <h2>Norteamento</h2>
+        <p>Definir direção, expectativas e referências antes de iniciar a delegação</p>
+      </div>
+      <div class="fase-meta">
+        <div class="fase-count">4 passos</div>
+        <div class="fase-toggle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+      </div>
+    </div>
+    <div class="passos-container open">
+      <div class="passos-wrapper">
+        <div class="passo visible">
+          <div class="passo-dot-container"><div class="passo-dot">1</div></div>
+          <div class="passo-card">
+            <div class="passo-card-top">
+              <span class="passo-icon">📂</span>
+              <h3>Inserir projeto de referência</h3>
+            </div>
+            <p class="passo-desc">Selecionar um projeto anterior que sirva como modelo visual e técnico para a nova demanda.</p>
+            <span class="passo-checklist-badge">☑ 2 itens no checklist</span>
+          </div>
+        </div>
+        <div class="passo visible">
+          <div class="passo-dot-container"><div class="passo-dot">2</div></div>
+          <div class="passo-card">
+            <div class="passo-card-top">
+              <span class="passo-icon">📝</span>
+              <h3>Descrever a entrega esperada</h3>
+            </div>
+            <p class="passo-desc">Escrever de forma objetiva o que se espera como resultado final dessa demanda.</p>
+            <span class="passo-checklist-badge">☑ 3 itens no checklist</span>
+          </div>
+        </div>
+        <div class="passo visible">
+          <div class="passo-dot-container"><div class="passo-dot">3</div></div>
+          <div class="passo-card">
+            <div class="passo-card-top">
+              <span class="passo-icon">📋</span>
+              <h3>Abrir o card de processos</h3>
+            </div>
+            <p class="passo-desc">Acessar a área de processos no Notion e criar uma nova página para documentar a demanda.</p>
+            <span class="passo-checklist-badge">☑ 3 itens no checklist</span>
+          </div>
+        </div>
+        <div class="passo visible">
+          <div class="passo-dot-container"><div class="passo-dot">4</div></div>
+          <div class="passo-card">
+            <div class="passo-card-top">
+              <span class="passo-icon">✏️</span>
+              <h3>Nomear e descrever o processo</h3>
+            </div>
+            <p class="passo-desc">Dar um título claro e preencher a descrição do que o processo abrange.</p>
+            <span class="passo-checklist-badge">☑ 2 itens no checklist</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONECTOR -->
+  <div class="fase-connector">
+    <svg viewBox="0 0 40 40" fill="none">
+      <path d="M20 4 C20 4, 20 36, 20 36" stroke="#C76C4D" stroke-width="2" stroke-dasharray="4 4" stroke-linecap="round"/>
+      <circle cx="20" cy="36" r="3" fill="#C76C4D"/>
+    </svg>
+  </div>
+
+  <!-- FASE 02 -->
+  <div class="fase">
+    <div class="fase-header" onclick="toggleFase(this)">
+      <div class="fase-number">02</div>
+      <div class="fase-info">
+        <h2>Descrever a Demanda</h2>
+        <p>Detalhar requisitos técnicos, padrão de qualidade e referências visuais</p>
+      </div>
+      <div class="fase-meta">
+        <div class="fase-count">4 passos</div>
+        <div class="fase-toggle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+      </div>
+    </div>
+    <div class="passos-container">
+      <div class="passos-wrapper">
+        <div class="passo">
+          <div class="passo-dot-container"><div class="passo-dot">1</div></div>
+          <div class="passo-card">
+            <div class="passo-card-top">
+              <span class="passo-icon">🎥</span>
+              <h3>Gravar vídeo explicativo</h3>
+            </div>
+            <p class="passo-desc">Gravar um screencast ou vídeo curto demonstrando como a demanda deve ser executada.</p>
+            <span class="passo-checklist-badge">☑ 2 itens no checklist</span>
+          </div>
+        </div>
+        <div class="passo">
+          <div class="passo-dot-container"><div class="passo-dot">2</div></div>
+          <div class="passo-card">
+            <div class="passo-card-top">
+              <span class="passo-icon">📏</span>
+              <h3>Detalhar requisitos técnicos</h3>
+            </div>
+            <p class="passo-desc">Listar todos os requisitos técnicos: escalas, formatos, softwares, padrões de nomenclatura.</p>
+            <span class="passo-checklist-badge">☑ 4 itens no checklist</span>
+          </div>
+        </div>
+        <div class="passo">
+          <div class="passo-dot-container"><div class="passo-dot">3</div></div>
+          <div class="passo-card">
+            <div class="passo-card-top">
+              <span class="passo-icon">✅</span>
+              <h3>Definir padrão de qualidade</h3>
+            </div>
+            <p class="passo-desc">Descrever o que é uma entrega perfeita: cotas alinhadas, fontes padronizadas, escala correta.</p>
+            <span class="passo-checklist-badge">☑ 5 itens no checklist</span>
+          </div>
+        </div>
+        <div class="passo">
+          <div class="passo-dot-container"><div class="passo-dot">4</div></div>
+          <div class="passo-card">
+            <div class="passo-card-top">
+              <span class="passo-icon">🖼️</span>
+              <h3>Inserir exemplos e referências</h3>
+            </div>
+            <p class="passo-desc">Anexar PDFs, imagens e projetos de referência que exemplifiquem o resultado esperado.</p>
+            <span class="passo-checklist-badge">☑ 2 itens no checklist</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONECTOR -->
+  <div class="fase-connector">
+    <svg viewBox="0 0 40 40" fill="none">
+      <path d="M20 4 C20 4, 20 36, 20 36" stroke="#B04B20" stroke-width="2" stroke-dasharray="4 4" stroke-linecap="round"/>
+      <circle cx="20" cy="36" r="3" fill="#B04B20"/>
+    </svg>
+  </div>
+
+  <!-- FASE 03 -->
+  <div class="fase">
+    <div class="fase-header" onclick="toggleFase(this)">
+      <div class="fase-number">03</div>
+      <div class="fase-info">
+        <h2>Detalhar Passo a Passo</h2>
+        <p>Estruturar o roteiro de execução, checklists individuais e alertas operacionais</p>
+      </div>
+      <div class="fase-meta">
+        <div class="fase-count">5 passos</div>
+        <div class="fase-toggle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+      </div>
+    </div>
+    <div class="passos-container">
+      <div class="passos-wrapper">
+        <div class="passo">
+          <div class="passo-dot-container"><div class="passo-dot">1</div></div>
+          <div class="passo-card">
+            <div class="passo-card-top">
+              <span class="passo-icon">📑</span>
+              <h3>Criar roteiro de execução</h3>
+            </div>
+            <p class="passo-desc">Montar o roteiro geral de como o processo deve ser executado do início ao fim.</p>
+            <span class="passo-checklist-badge">☑ 3 itens no checklist</span>
+          </div>
+        </div>
+        <div class="passo">
+          <div class="passo-dot-container"><div class="passo-dot">2</div></div>
+          <div class="passo-card">
+            <div class="passo-card-top">
+              <span class="passo-icon">🔢</span>
+              <h3>Numerar e descrever cada passo</h3>
+            </div>
+            <p class="passo-desc">Detalhar passo a passo no formato enumerado com observações em negrito quando necessário.</p>
+            <span class="passo-checklist-badge">☑ 3 itens no checklist</span>
+          </div>
+        </div>
+        <div class="passo">
+          <div class="passo-dot-container"><div class="passo-dot">3</div></div>
+          <div class="passo-card">
+            <div class="passo-card-top">
+              <span class="passo-icon">☑️</span>
+              <h3>Definir checklist por passo</h3>
+            </div>
+            <p class="passo-desc">Criar itens de verificação para cada passo, servindo como autoavaliação e correção.</p>
+            <span class="passo-checklist-badge">☑ 4 itens no checklist</span>
+          </div>
+        </div>
+        <div class="passo">
+          <div class="passo-dot-container"><div class="passo-dot">4</div></div>
+          <div class="passo-card">
+            <div class="passo-card-top">
+              <span class="passo-icon">⚠️</span>
+              <h3>Alertas operacionais</h3>
+            </div>
+            <p class="passo-desc">Listar erros comuns, pontos de atenção e o que não pode ser esquecido de forma alguma.</p>
+            <span class="passo-checklist-badge">☑ 3 itens no checklist</span>
+          </div>
+        </div>
+        <div class="passo">
+          <div class="passo-dot-container"><div class="passo-dot">5</div></div>
+          <div class="passo-card">
+            <div class="passo-card-top">
+              <span class="passo-icon">📊</span>
+              <h3>Consolidar checklist geral</h3>
+            </div>
+            <p class="passo-desc">Unificar todos os checklists individuais em um documento consolidado por fase.</p>
+            <span class="passo-checklist-badge">☑ 2 itens no checklist</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-left">Studio PI Arquitetura &middot; Procedimento Operacional Padrão &middot; 2026</div>
+  <div class="footer-legend">
+    <div class="legend-item">
+      <div class="legend-dot" style="background: var(--terracota);"></div>
+      Fase do processo
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background: var(--bege); border: 1.5px solid var(--cinza-light);"></div>
+      Passo de execução
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background: var(--fundo); border: 1.5px solid var(--cinza-light);"></div>
+      Passe o mouse para detalhes
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Toggle fase
+  function toggleFase(header) {
+    const container = header.nextElementSibling;
+    const isOpen = container.classList.contains('open');
+
+    // Toggle
+    header.classList.toggle('active');
+    container.classList.toggle('open');
+
+    // Animate passos in
+    if (!isOpen) {
+      const passos = container.querySelectorAll('.passo');
+      passos.forEach((p, i) => {
+        setTimeout(() => p.classList.add('visible'), i * 100);
+      });
+    } else {
+      const passos = container.querySelectorAll('.passo');
+      passos.forEach(p => p.classList.remove('visible'));
+    }
+  }
+
+  // Progress bar based on scroll
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    document.getElementById('progressBar').style.width = progress + '%';
+  });
+
+  // Init: first fase open with visible passos
+  document.addEventListener('DOMContentLoaded', () => {
+    const firstPassos = document.querySelector('.fase:first-child .passos-container.open .passo');
+    if (firstPassos) {
+      const allPassos = document.querySelectorAll('.fase:first-child .passo');
+      allPassos.forEach((p, i) => {
+        setTimeout(() => p.classList.add('visible'), 200 + i * 100);
+      });
+    }
+  });
+</script>
+
+</body>
+</html>
