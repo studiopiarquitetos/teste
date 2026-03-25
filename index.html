@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POPs — Studio PI</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui,sans-serif;background:#FAF9F6;color:#1A1A1A;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:60px 20px}
+h1{font-size:28px;margin-bottom:8px}
+h1 span{color:#C76C4D}
+p{color:#6B6560;margin-bottom:40px;font-size:14px}
+.cards{display:flex;flex-direction:column;gap:12px;width:100%;max-width:500px}
+a{text-decoration:none;color:inherit}
+.card{background:#fff;border:1.5px solid #E0DECC;border-radius:12px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;transition:all .3s}
+.card:hover{border-color:#C76C4D;box-shadow:0 4px 16px rgba(0,0,0,.06);transform:translateY(-2px)}
+.card h3{font-size:15px;font-weight:600}
+.card p{color:#6B6560;font-size:12px;margin:4px 0 0}
+.arrow{color:#C76C4D;font-size:18px}
+.badge{font-size:11px;color:#C76C4D;background:rgba(199,108,77,.1);padding:4px 12px;border-radius:12px;display:inline-block;margin-bottom:20px}
+</style>
+</head>
+<body>
+<div class="badge">Studio PI Arquitetura</div>
+<h1>Nossos <span>POPs</span></h1>
+<p>Procedimentos Operacionais Padrão — clique para acessar</p>
+<div class="cards">
+  <a href="processo_delegacao.html">
+    <div class="card">
+      <div>
+        <h3>Processo de Delegação</h3>
+        <p>3 fases · 13 passos</p>
+      </div>
+      <span class="arrow">→</span>
+    </div>
+  </a>
+  <a href="#">
+    <div class="card" style="opacity:.4">
+      <div>
+        <h3>Pontos de Iluminação</h3>
+        <p>Em breve</p>
+      </div>
+      <span class="arrow">→</span>
+    </div>
+  </a>
+</div>
+</body>
+</html>
