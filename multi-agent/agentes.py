@@ -11,7 +11,11 @@ Uso:
 import anyio
 import sys
 import os
-from claude_agent_sdk import query, ClaudeAgentOptions, AgentDefinition, ResultMessage, SystemMessage
+from claude_agent_sdk import (
+    query, ClaudeAgentOptions, AgentDefinition,
+    ResultMessage, SystemMessage, AssistantMessage,
+    TextBlock, ToolUseBlock, ToolResultBlock,
+)
 
 # ─────────────────────────────────────────────
 # DEFINIÇÃO DOS AGENTES ESPECIALIZADOS
@@ -136,12 +140,23 @@ Responda sempre em português brasileiro."""
 # EXECUÇÃO
 # ─────────────────────────────────────────────
 
+ICONES_AGENTES = {
+    "arquiteto-legal": "📐",
+    "comercial":       "🤝",
+    "financeiro":      "💰",
+    "marketing":       "📣",
+    "criativos":       "🎨",
+    "gestao-interna":  "📋",
+    "documentacoes":   "📄",
+}
+
 async def executar(tarefa: str):
     print(f"\n🏗️  Studio PI - Sistema Multi-Agentes")
     print(f"📋 Tarefa: {tarefa}")
     print("─" * 50)
 
     session_id = None
+    agente_atual = "🧠 Orquestrador"
 
     async for message in query(
         prompt=tarefa,
@@ -153,13 +168,38 @@ async def executar(tarefa: str):
             max_turns=30,
         ),
     ):
-        if isinstance(message, SystemMessage) and message.subtype == "init":
-            session_id = message.data.get("session_id")
+        if isinstance(message, SystemMessage):
+            if message.subtype == "init":
+                session_id = message.data.get("session_id")
+                print(f"\n🧠 Orquestrador iniciado\n")
+
+        elif isinstance(message, AssistantMessage):
+            for block in message.content:
+                # Orquestrador pensando / falando
+                if isinstance(block, TextBlock) and block.text.strip():
+                    print(f"\n💬 {agente_atual}:")
+                    print(f"   {block.text.strip()[:300]}{'...' if len(block.text) > 300 else ''}")
+
+                # Orquestrador chamando um agente
+                elif isinstance(block, ToolUseBlock):
+                    if block.name == "Agent":
+                        nome = block.input.get("agent_type", "agente")
+                        icone = ICONES_AGENTES.get(nome, "🤖")
+                        agente_atual = f"{icone} {nome}"
+                        print(f"\n{'─'*50}")
+                        print(f"  ➜ Chamando {agente_atual}...")
+                        tarefa_agente = block.input.get("prompt", "")
+                        if tarefa_agente:
+                            print(f"  📩 Missão: {tarefa_agente[:200]}")
+                        print(f"{'─'*50}")
+                    else:
+                        print(f"\n🔧 {agente_atual} usando ferramenta: {block.name}")
 
         elif isinstance(message, ResultMessage):
-            print("\n✅ Resultado:\n")
+            print(f"\n\n{'═'*50}")
+            print(f"✅ RESULTADO FINAL\n")
             print(message.result)
-            print("\n─" * 50)
+            print(f"{'═'*50}")
             if session_id:
                 print(f"📎 Session ID: {session_id}")
 
